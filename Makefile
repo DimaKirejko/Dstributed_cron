@@ -48,3 +48,9 @@ migrate-action:
 		-path /migrations \
 		-database "postgres://${PG_USER}:${PG_PASS}@dc-postgres:5432/${PG_DB}?sslmode=disable" \
 		$(action)
+
+run-todoapp:
+	@export LOGGER_FOLDER=${PROJECT_ROOT}/out/logs && \
+	export PG_HOST=localhost && \
+	go mod tidy && \
+	go run ${PROJECT_ROOT}/cmd/DC/main.go
