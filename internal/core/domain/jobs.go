@@ -7,7 +7,7 @@ import (
 )
 
 type Job struct {
-	Id int
+	Id core_job_types.ID
 
 	JobType core_job_types.Type
 	Status  core_job_types.Status
