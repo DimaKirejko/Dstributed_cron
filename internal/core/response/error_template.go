@@ -68,6 +68,9 @@ func mapError(
 	case errors.Is(err, core_errors.ErrInvalidArgument):
 		return http.StatusBadRequest, log.Warn
 
+	case errors.Is(err, core_errors.ErrNotFound):
+		return http.StatusNotFound, log.Warn
+
 	default:
 		return http.StatusInternalServerError, log.Error
 	}

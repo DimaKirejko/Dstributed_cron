@@ -5,9 +5,11 @@ export PROJECT_ROOT=${shell pwd}
 
 pg-up:
 	@docker compose up -d dc-postgres
+	@docker compose up -d port-forwarder
 
 pg-down:
 	@docker compose down dc-postgres
+	@docker compose down port-forwarder
 
 pg-cleanup:
 	@read -p "CLEANUP ALL VOLUME?? [y/N]: " ans; \
