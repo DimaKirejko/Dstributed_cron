@@ -1,4 +1,26 @@
 services:
+  dc:
+    build:
+      context: ${PROJECT_ROOT}
+      dockerfile: ${PROJECT_ROOT}/cmd/DC/Dockerfile
+    container_name: dc
+    environment:
+      - HTTP_ADDR=:5050
+      - HTTP_SHUTDOWN_TIMEOUT=${HTTP_SHUTDOWN_TIMEOUT}
+      - ALLOWED_PROD_ORIGIN=${ALLOWED_PROD_ORIGIN}
+      - PG_HOST=dc-postgres
+      - PG_USER=${PG_USER}
+      - PG_PASS=${PG_PASS}
+      - PG_DB=${PG_DB}
+      - PG_TIMEOUT=${PG_TIMEOUT}
+      - LOGGER_LEVEL=${LOGGER_LEVEL}
+      - LOGGER_FOLDER=/app/out/logs
+    volumes:
+      - ${PROJECT_ROOT}/out/logs:/app/out/logs
+    ports:
+      - "5050:5050"
+    restart: always
+
   dc-postgres:
     image: postgres:18-bookworm
     container_name: dc-env-postgres
@@ -21,3 +43,35 @@ services:
     command: tcp-listen:5432,fork,reuseaddr tcp-connect:dc-postgres:5432
     ports:
       - "127.0.0.1:5432:5432"
+
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+    - "19090:9090"
+    extra_hosts:
+    - "host.docker.internal:host-gateway"
+
+  grafana:
+    image: grafana/grafana-oss:9.4.3
+    ports:
+      - "13000:3000"
+    volumes:
+      - grafana-data:/var/lib/grafana
+
+  swagger:
+    build:
+      context: ${PROJECT_ROOT}
+      dockerfile_inline: |
+         FROM golang:1.25.0-alpine
+         RUN apk add --no-cache git
+         RUN go install github.com/swaggo/swag/cmd/swag@v1.16.6
+         WORKDIR /code
+         ENTRYPOINT ["swag"]
+    volumes:
+      - ${PROJECT_ROOT}:/code
+
+volumes:
+  grafana-data:
+  

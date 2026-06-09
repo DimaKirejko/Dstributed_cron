@@ -1,0 +1,312 @@
+definitions:
+  github_com_DimaKirejko_Dstributed_cron_internal_core_response.ErrorResponse:
+    properties:
+      error:
+        type: string
+      message:
+        type: string
+    type: object
+  github_com_DimaKirejko_Dstributed_cron_internal_core_types.DBAction:
+    enum:
+    - create_partition
+    - year_cleanup
+    type: string
+    x-enum-varnames:
+    - DBActiCreatePartition
+    - DBActiYearCleanup
+  github_com_DimaKirejko_Dstributed_cron_internal_core_types.HTTPMethod:
+    enum:
+    - GET
+    - POST
+    - PUT
+    - PATCH
+    - DELETE
+    type: string
+    x-enum-varnames:
+    - HTTPGet
+    - HTTPPost
+    - HTTPPut
+    - HTTPPatch
+    - HTTPDelete
+  github_com_DimaKirejko_Dstributed_cron_internal_core_types.Status:
+    enum:
+    - queued
+    - running
+    - succeeded
+    - failed
+    - canceled
+    type: string
+    x-enum-varnames:
+    - StatusQueued
+    - StatusRunning
+    - StatusSucceeded
+    - StatusFailed
+    - StatusCanceled
+  github_com_DimaKirejko_Dstributed_cron_internal_core_types.Type:
+    enum:
+    - http
+    - db
+    type: string
+    x-enum-varnames:
+    - TypeHTTP
+    - TypeDB
+  internal_features_jobs_transport.ChangeJob:
+    properties:
+      id:
+        type: integer
+    required:
+    - id
+    type: object
+  internal_features_jobs_transport.ChangeJobRespDTO:
+    properties:
+      attempt:
+        type: integer
+      created_at:
+        type: string
+      daily_run_time:
+        type: string
+      db_action:
+        $ref: '#/definitions/github_com_DimaKirejko_Dstributed_cron_internal_core_types.DBAction'
+      finished_at:
+        type: string
+      http_url:
+        type: string
+      id:
+        type: integer
+      is_repetable:
+        type: boolean
+      job_type:
+        $ref: '#/definitions/github_com_DimaKirejko_Dstributed_cron_internal_core_types.Type'
+      last_error:
+        type: string
+      locked_by:
+        type: integer
+      max_retries:
+        type: integer
+      status:
+        $ref: '#/definitions/github_com_DimaKirejko_Dstributed_cron_internal_core_types.Status'
+      target_db:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  internal_features_jobs_transport.CreateJobReqDTO:
+    properties:
+      db_action:
+        $ref: '#/definitions/github_com_DimaKirejko_Dstributed_cron_internal_core_types.DBAction'
+      http_method:
+        allOf:
+        - $ref: '#/definitions/github_com_DimaKirejko_Dstributed_cron_internal_core_types.HTTPMethod'
+        enum:
+        - GET
+        - POST
+        - DELETE
+        - PUT
+        - PATCH
+      http_url:
+        type: string
+      is_repetable:
+        type: boolean
+      max_retries:
+        maximum: 5
+        minimum: 1
+        type: integer
+      run_at:
+        type: string
+      target_db:
+        type: string
+      type:
+        allOf:
+        - $ref: '#/definitions/github_com_DimaKirejko_Dstributed_cron_internal_core_types.Type'
+        enum:
+        - http
+        - db
+    required:
+    - run_at
+    - type
+    type: object
+  internal_features_jobs_transport.CreateJobRespDTO:
+    properties:
+      id:
+        type: integer
+    type: object
+  internal_features_jobs_transport.GetJobDTO:
+    properties:
+      id:
+        type: integer
+    required:
+    - id
+    type: object
+  internal_features_jobs_transport.GetJobRespDTO:
+    properties:
+      attempt:
+        type: integer
+      created_at:
+        type: string
+      daily_run_time:
+        type: string
+      db_action:
+        $ref: '#/definitions/github_com_DimaKirejko_Dstributed_cron_internal_core_types.DBAction'
+      finished_at:
+        type: string
+      http_url:
+        type: string
+      id:
+        type: integer
+      is_repetable:
+        type: boolean
+      job_type:
+        $ref: '#/definitions/github_com_DimaKirejko_Dstributed_cron_internal_core_types.Type'
+      last_error:
+        type: string
+      locked_by:
+        type: integer
+      max_retries:
+        type: integer
+      status:
+        $ref: '#/definitions/github_com_DimaKirejko_Dstributed_cron_internal_core_types.Status'
+      target_db:
+        type: string
+      updated_at:
+        type: string
+    type: object
+host: 127.0.0.1:5050
+info:
+  contact: {}
+  description: TDO REST-API schema
+  version: "1.0"
+paths:
+  /jobs:
+    get:
+      consumes:
+      - application/json
+      description: Returns a job by id.
+      parameters:
+      - description: Get job request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/internal_features_jobs_transport.GetJobDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_features_jobs_transport.GetJobRespDTO'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_DimaKirejko_Dstributed_cron_internal_core_response.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/github_com_DimaKirejko_Dstributed_cron_internal_core_response.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_DimaKirejko_Dstributed_cron_internal_core_response.ErrorResponse'
+      summary: Get job
+      tags:
+      - jobs
+    post:
+      consumes:
+      - application/json
+      description: Creates a new distributed cron job. For type "http", provide http_method
+        and http_url. For type "db", provide db_action and target_db.
+      parameters:
+      - description: Create job request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/internal_features_jobs_transport.CreateJobReqDTO'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/internal_features_jobs_transport.CreateJobRespDTO'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_DimaKirejko_Dstributed_cron_internal_core_response.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_DimaKirejko_Dstributed_cron_internal_core_response.ErrorResponse'
+      summary: Create job
+      tags:
+      - jobs
+  /jobs/cencel:
+    patch:
+      consumes:
+      - application/json
+      description: Cancels an existing job by id and returns the updated job.
+      parameters:
+      - description: Cancel job request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/internal_features_jobs_transport.ChangeJob'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_features_jobs_transport.ChangeJobRespDTO'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_DimaKirejko_Dstributed_cron_internal_core_response.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/github_com_DimaKirejko_Dstributed_cron_internal_core_response.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_DimaKirejko_Dstributed_cron_internal_core_response.ErrorResponse'
+      summary: Cancel job
+      tags:
+      - jobs
+  /jobs/rerun:
+    patch:
+      consumes:
+      - application/json
+      description: Schedules an existing job for rerun by id and returns the updated
+        job.
+      parameters:
+      - description: Rerun job request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/internal_features_jobs_transport.ChangeJob'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_features_jobs_transport.ChangeJobRespDTO'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_DimaKirejko_Dstributed_cron_internal_core_response.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/github_com_DimaKirejko_Dstributed_cron_internal_core_response.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_DimaKirejko_Dstributed_cron_internal_core_response.ErrorResponse'
+      summary: Rerun job
+      tags:
+      - jobs
+swagger: "2.0"

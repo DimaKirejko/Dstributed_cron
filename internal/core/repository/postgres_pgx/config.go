@@ -13,6 +13,7 @@ type Config struct {
 	User     string        `envconfig:"USER" required:"true"`
 	Password string        `envconfig:"PASS" required:"true"`
 	Database string        `envconfig:"DB" required:"true"`
+	TimeZone string        `envconfig:"TIMEZONE" required:"true"`
 	Timeout  time.Duration `envconfig:"TIMEOUT" required:"true"`
 }
 
