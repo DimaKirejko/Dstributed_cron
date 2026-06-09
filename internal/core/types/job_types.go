@@ -28,15 +28,21 @@ const (
 type HTTPMethod string
 
 const (
-	HTTPGet  HTTPMethod = http.MethodGet
-	HTTPPost HTTPMethod = http.MethodPost
-	// HTTPPut    HTTPMethod = http.MethodPut
-	// HTTPPatch  HTTPMethod = http.MethodPatch
+	HTTPGet    HTTPMethod = http.MethodGet
+	HTTPPost   HTTPMethod = http.MethodPost
+	HTTPPut    HTTPMethod = http.MethodPut
+	HTTPPatch  HTTPMethod = http.MethodPatch
 	HTTPDelete HTTPMethod = http.MethodDelete
 )
 
 type DBAction string
 
 const (
-	DBActionVacuum DBAction = "create_partition"
+	DBActiCreatePartition DBAction = "create_partition"
+	DBActiYearCleanup     DBAction = "year_cleanup"
 )
+
+var AllDBActions = []DBAction{
+	DBActiCreatePartition,
+	DBActiYearCleanup,
+}

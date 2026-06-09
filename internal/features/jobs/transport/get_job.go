@@ -3,6 +3,7 @@ package jobs_transport_http
 import (
 	"fmt"
 	"net/http"
+	"time"
 
 	core_errors "github.com/DimaKirejko/Dstributed_cron/internal/core/errors"
 	core_logger "github.com/DimaKirejko/Dstributed_cron/internal/core/logger"
@@ -15,6 +16,37 @@ type GetJobDTO struct {
 	ID core_job_types.ID `json:"id" binding:"required"`
 }
 
+type GetJobRespDTO struct {
+	ID           core_job_types.ID        `json:"id"`
+	JobType      core_job_types.Type      `json:"job_type"`
+	Status       core_job_types.Status    `json:"status"`
+	DailyRunTime string                   `json:"daily_run_time"`
+	Attempt      int                      `json:"attempt"`
+	MaxRetries   int                      `json:"max_retries"`
+	IsRepetable  bool                     `json:"is_repetable"`
+	HTTPURL      *string                  `json:"http_url"`
+	DBAction     *core_job_types.DBAction `json:"db_action"`
+	TargetDB     *string                  `json:"target_db"`
+	LastError    *string                  `json:"last_error"`
+	LockedBy     *int64                   `json:"locked_by"`
+	UpdatedAt    *time.Time               `json:"updated_at"`
+	FinishedAt   *time.Time               `json:"finished_at"`
+	CreatedAt    time.Time                `json:"created_at"`
+}
+
+// GetJob returns a job by id.
+//
+// @Summary Get job
+// @Description Returns a job by id.
+// @Tags jobs
+// @Accept json
+// @Produce json
+// @Param request body GetJobDTO true "Get job request"
+// @Success 200 {object} GetJobRespDTO
+// @Failure 400 {object} core_error_tamplate.ErrorResponse
+// @Failure 404 {object} core_error_tamplate.ErrorResponse
+// @Failure 500 {object} core_error_tamplate.ErrorResponse
+// @Router /jobs [get]
 func (h *JobsHttpHandler) GetJob(c *gin.Context) {
 	var req GetJobDTO
 	logger := core_logger.FromContext(c.Request.Context())
@@ -36,20 +68,24 @@ func (h *JobsHttpHandler) GetJob(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"id":             job.Id,
-		"job_type":       job.JobType,
-		"status":         job.Status,
-		"daily_run_time": job.DailyRunTime,
-		"attempt":        job.Attempt,
-		"max_retries":    job.MaxRetries,
-		"http_url":       job.HttpURL,
-		"db_action":      job.DbAction,
-		"last_error":     job.LastError,
-		"locked_by":      job.LockedBy,
-		"updated_at":     job.UpdatedAt,
-		"finished_at":    job.FinishedAt,
-		"created_at":     job.CreatedAt,
-	})
+	resp := GetJobRespDTO{
+		ID:           job.Id,
+		JobType:      job.JobType,
+		Status:       job.Status,
+		DailyRunTime: job.DailyRunTime,
+		Attempt:      job.Attempt,
+		MaxRetries:   job.MaxRetries,
+		IsRepetable:  job.IsRepetable,
+		HTTPURL:      job.HttpURL,
+		DBAction:     job.DbAction,
+		TargetDB:     job.TargetDB,
+		LastError:    job.LastError,
+		LockedBy:     job.LockedBy,
+		UpdatedAt:    job.UpdatedAt,
+		FinishedAt:   job.FinishedAt,
+		CreatedAt:    job.CreatedAt,
+	}
+
+	c.JSON(http.StatusOK, resp)
 
 }

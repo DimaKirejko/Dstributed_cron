@@ -17,7 +17,7 @@ type JobsHttpHandler struct {
 type JobsService interface {
 	CreateJob(
 		ctx context.Context,
-		input jobs_service.CreateJobInput,
+		input *jobs_service.CreateJobInput,
 	) (core_job_types.ID, error)
 
 	GetJob(

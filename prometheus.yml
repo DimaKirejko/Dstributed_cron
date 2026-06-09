@@ -1,0 +1,22 @@
+global:
+  scrape_interval: 15s
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+            - alertmanager:9093
+
+rule_files:
+  - alerts.yml
+
+scrape_configs:
+  - job_name: "cronapp"
+    static_configs:
+      - targets:
+          - host.docker.internal:2112 ##recheck mb wrong target (cronapp != container)
+
+  - job_name: "prometheus"
+    static_configs:
+      - targets:
+          - localhost:9090

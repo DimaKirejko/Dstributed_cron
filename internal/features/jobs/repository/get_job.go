@@ -19,7 +19,24 @@ func (r *JobRepository) GetJob(
 	defer cancel()
 
 	query := `
-	SELECT id, type, status, daily_run_time, attempt, max_retries, http_method, http_url, db_action, last_error, locked_by, lock_until, updated_at, finished_at, created_at
+	SELECT 
+		id,
+		type,
+		status, 
+		daily_run_time, 
+		attempt, 
+		max_retries,
+		is_repetable,
+		http_method, 
+		http_url, 
+		db_action, 
+		target_db, 
+		last_error, 
+		locked_by, 
+		lock_until, 
+		updated_at, 
+		finished_at, 
+		created_at
 	from cronapp.jobs
 	WHERE id=$1;`
 
@@ -34,9 +51,11 @@ func (r *JobRepository) GetJob(
 		&job.DailyRunTime,
 		&job.Attempt,
 		&job.MaxRetries,
+		&job.IsRepetable,
 		&job.HttpMethod,
 		&job.HttpURL,
 		&job.DbAction,
+		&job.TargetDB,
 		&job.LastError,
 		&job.LockedBy,
 		&job.LockUntil,

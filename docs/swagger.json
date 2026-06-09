@@ -1,0 +1,464 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "TDO REST-API schema",
+        "contact": {},
+        "version": "1.0"
+    },
+    "host": "127.0.0.1:5050",
+    "paths": {
+        "/jobs": {
+            "get": {
+                "description": "Returns a job by id.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "jobs"
+                ],
+                "summary": "Get job",
+                "parameters": [
+                    {
+                        "description": "Get job request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/internal_features_jobs_transport.GetJobDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/internal_features_jobs_transport.GetJobRespDTO"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_DimaKirejko_Dstributed_cron_internal_core_response.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_DimaKirejko_Dstributed_cron_internal_core_response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_DimaKirejko_Dstributed_cron_internal_core_response.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Creates a new distributed cron job. For type \"http\", provide http_method and http_url. For type \"db\", provide db_action and target_db.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "jobs"
+                ],
+                "summary": "Create job",
+                "parameters": [
+                    {
+                        "description": "Create job request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/internal_features_jobs_transport.CreateJobReqDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/internal_features_jobs_transport.CreateJobRespDTO"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_DimaKirejko_Dstributed_cron_internal_core_response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_DimaKirejko_Dstributed_cron_internal_core_response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/jobs/cencel": {
+            "patch": {
+                "description": "Cancels an existing job by id and returns the updated job.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "jobs"
+                ],
+                "summary": "Cancel job",
+                "parameters": [
+                    {
+                        "description": "Cancel job request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/internal_features_jobs_transport.ChangeJob"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/internal_features_jobs_transport.ChangeJobRespDTO"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_DimaKirejko_Dstributed_cron_internal_core_response.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_DimaKirejko_Dstributed_cron_internal_core_response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_DimaKirejko_Dstributed_cron_internal_core_response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/jobs/rerun": {
+            "patch": {
+                "description": "Schedules an existing job for rerun by id and returns the updated job.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "jobs"
+                ],
+                "summary": "Rerun job",
+                "parameters": [
+                    {
+                        "description": "Rerun job request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/internal_features_jobs_transport.ChangeJob"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/internal_features_jobs_transport.ChangeJobRespDTO"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_DimaKirejko_Dstributed_cron_internal_core_response.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_DimaKirejko_Dstributed_cron_internal_core_response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_DimaKirejko_Dstributed_cron_internal_core_response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "github_com_DimaKirejko_Dstributed_cron_internal_core_response.ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_DimaKirejko_Dstributed_cron_internal_core_types.DBAction": {
+            "type": "string",
+            "enum": [
+                "create_partition",
+                "year_cleanup"
+            ],
+            "x-enum-varnames": [
+                "DBActiCreatePartition",
+                "DBActiYearCleanup"
+            ]
+        },
+        "github_com_DimaKirejko_Dstributed_cron_internal_core_types.HTTPMethod": {
+            "type": "string",
+            "enum": [
+                "GET",
+                "POST",
+                "PUT",
+                "PATCH",
+                "DELETE"
+            ],
+            "x-enum-varnames": [
+                "HTTPGet",
+                "HTTPPost",
+                "HTTPPut",
+                "HTTPPatch",
+                "HTTPDelete"
+            ]
+        },
+        "github_com_DimaKirejko_Dstributed_cron_internal_core_types.Status": {
+            "type": "string",
+            "enum": [
+                "queued",
+                "running",
+                "succeeded",
+                "failed",
+                "canceled"
+            ],
+            "x-enum-varnames": [
+                "StatusQueued",
+                "StatusRunning",
+                "StatusSucceeded",
+                "StatusFailed",
+                "StatusCanceled"
+            ]
+        },
+        "github_com_DimaKirejko_Dstributed_cron_internal_core_types.Type": {
+            "type": "string",
+            "enum": [
+                "http",
+                "db"
+            ],
+            "x-enum-varnames": [
+                "TypeHTTP",
+                "TypeDB"
+            ]
+        },
+        "internal_features_jobs_transport.ChangeJob": {
+            "type": "object",
+            "required": [
+                "id"
+            ],
+            "properties": {
+                "id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "internal_features_jobs_transport.ChangeJobRespDTO": {
+            "type": "object",
+            "properties": {
+                "attempt": {
+                    "type": "integer"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "daily_run_time": {
+                    "type": "string"
+                },
+                "db_action": {
+                    "$ref": "#/definitions/github_com_DimaKirejko_Dstributed_cron_internal_core_types.DBAction"
+                },
+                "finished_at": {
+                    "type": "string"
+                },
+                "http_url": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "is_repetable": {
+                    "type": "boolean"
+                },
+                "job_type": {
+                    "$ref": "#/definitions/github_com_DimaKirejko_Dstributed_cron_internal_core_types.Type"
+                },
+                "last_error": {
+                    "type": "string"
+                },
+                "locked_by": {
+                    "type": "integer"
+                },
+                "max_retries": {
+                    "type": "integer"
+                },
+                "status": {
+                    "$ref": "#/definitions/github_com_DimaKirejko_Dstributed_cron_internal_core_types.Status"
+                },
+                "target_db": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_features_jobs_transport.CreateJobReqDTO": {
+            "type": "object",
+            "required": [
+                "run_at",
+                "type"
+            ],
+            "properties": {
+                "db_action": {
+                    "$ref": "#/definitions/github_com_DimaKirejko_Dstributed_cron_internal_core_types.DBAction"
+                },
+                "http_method": {
+                    "enum": [
+                        "GET",
+                        "POST",
+                        "DELETE",
+                        "PUT",
+                        "PATCH"
+                    ],
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/github_com_DimaKirejko_Dstributed_cron_internal_core_types.HTTPMethod"
+                        }
+                    ]
+                },
+                "http_url": {
+                    "type": "string"
+                },
+                "is_repetable": {
+                    "type": "boolean"
+                },
+                "max_retries": {
+                    "type": "integer",
+                    "maximum": 5,
+                    "minimum": 1
+                },
+                "run_at": {
+                    "type": "string"
+                },
+                "target_db": {
+                    "type": "string"
+                },
+                "type": {
+                    "enum": [
+                        "http",
+                        "db"
+                    ],
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/github_com_DimaKirejko_Dstributed_cron_internal_core_types.Type"
+                        }
+                    ]
+                }
+            }
+        },
+        "internal_features_jobs_transport.CreateJobRespDTO": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "internal_features_jobs_transport.GetJobDTO": {
+            "type": "object",
+            "required": [
+                "id"
+            ],
+            "properties": {
+                "id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "internal_features_jobs_transport.GetJobRespDTO": {
+            "type": "object",
+            "properties": {
+                "attempt": {
+                    "type": "integer"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "daily_run_time": {
+                    "type": "string"
+                },
+                "db_action": {
+                    "$ref": "#/definitions/github_com_DimaKirejko_Dstributed_cron_internal_core_types.DBAction"
+                },
+                "finished_at": {
+                    "type": "string"
+                },
+                "http_url": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "is_repetable": {
+                    "type": "boolean"
+                },
+                "job_type": {
+                    "$ref": "#/definitions/github_com_DimaKirejko_Dstributed_cron_internal_core_types.Type"
+                },
+                "last_error": {
+                    "type": "string"
+                },
+                "locked_by": {
+                    "type": "integer"
+                },
+                "max_retries": {
+                    "type": "integer"
+                },
+                "status": {
+                    "$ref": "#/definitions/github_com_DimaKirejko_Dstributed_cron_internal_core_types.Status"
+                },
+                "target_db": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

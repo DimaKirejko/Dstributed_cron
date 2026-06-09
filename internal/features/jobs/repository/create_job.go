@@ -12,12 +12,29 @@ func (r *JobRepository) Create_job(
 	ctx context.Context,
 	job domain.Job,
 ) (core_job_types.ID, error) {
-	ctx, cancel := context.WithTimeout(ctx, r.pool.OpTimeout()) // OpTimeout треба додатково проставити
+	ctx, cancel := context.WithTimeout(ctx, r.pool.OpTimeout())
 	defer cancel()
 
 	query := `
-	INSERT INTO cronapp.jobs (type, status, daily_run_time, attempt, max_retries, http_method, http_url, db_action, last_error, locked_by, lock_until, updated_at, finished_at, created_at)
-	VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
+	INSERT INTO cronapp.jobs (
+		type, 
+		status, 
+		daily_run_time, 
+		attempt, 
+		max_retries, 
+		is_repetable, 
+		http_method, 
+		http_url, 
+		db_action, 
+		target_db, 
+		last_error, 
+		locked_by, 
+		lock_until, 
+		updated_at, 
+		finished_at, 
+		created_at
+	)
+	VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)
 	RETURNING id;`
 
 	row := r.pool.QueryRow(
@@ -28,9 +45,11 @@ func (r *JobRepository) Create_job(
 		job.DailyRunTime,
 		job.Attempt,
 		job.MaxRetries,
+		job.IsRepetable,
 		job.HttpMethod,
 		job.HttpURL,
 		job.DbAction,
+		job.TargetDB,
 		job.LastError,
 		job.LockedBy,
 		job.LockUntil,
