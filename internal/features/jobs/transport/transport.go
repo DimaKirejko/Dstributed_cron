@@ -34,6 +34,11 @@ type JobsService interface {
 		ctx context.Context,
 		id core_job_types.ID,
 	) (domain.Job, error)
+
+	GetJobAttempts(
+		ctx context.Context,
+		jobID core_job_types.ID,
+	) ([]domain.Attempt, error)
 }
 
 func NewJobsHttpHandler(jobsService JobsService) *JobsHttpHandler {
@@ -53,6 +58,11 @@ func (h *JobsHttpHandler) Route() []core_http_server.Route {
 			Method:  http.MethodGet,
 			Path:    "/jobs",
 			Handler: h.GetJob,
+		},
+		{
+			Method:  http.MethodGet,
+			Path:    "/jobs/attempts",
+			Handler: h.GetJobAttempts,
 		},
 		{
 			Method:  http.MethodPatch,

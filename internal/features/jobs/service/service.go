@@ -27,6 +27,11 @@ type JobRepository interface {
 		id core_job_types.ID,
 		newStatus core_job_types.Status,
 	) (domain.Job, error)
+
+	GetJobAttempts(
+		ctx context.Context,
+		jobID core_job_types.ID,
+	) ([]domain.Attempt, error)
 }
 
 func NewJobsService(jobsrepository JobRepository) *JobService {

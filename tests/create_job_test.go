@@ -30,6 +30,13 @@ func (r *fakeJobRepository) ChangeJob(
 	return domain.Job{Id: id, Status: newStatus}, nil
 }
 
+func (r *fakeJobRepository) GetJobAttempts(
+	ctx context.Context,
+	jobID core_job_types.ID,
+) ([]domain.Attempt, error) {
+	return nil, nil
+}
+
 func TestCreateHTTPJobAllowedURLDefaultsToRepetable(t *testing.T) {
 	t.Setenv("EXECUTOR_ALLOWLIST", "example.com,httpbin.org")
 
